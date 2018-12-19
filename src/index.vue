@@ -1,56 +1,46 @@
 <template>
-    <nb-container :style="{ backgroundColor: '#fff' }">
-        <nb-header>
-          <nb-left>
-            <nb-button
-              transparent
-              :onPress="() => this.props.navigation.goBack()"
-            >
-              <nb-icon name="arrow-back" />
-            </nb-button>
-          </nb-left>
-          <nb-body>
-            <nb-title>Single SwipeRow</nb-title>
-          </nb-body>
-          <nb-right />
-        </nb-header>
-        <nb-content :scrollEnabled="false">
-            <nb-swipe-row
-                :leftOpenValue="75"
-                :rightOpenValue="-75"
-                :left="getSwipeLeftComponet()"
-                :right="getSwipeRightComponet()"
-                :body="getSwipeBodyComponet()"
-            />
-        </nb-content>
+  <root>
+    <nb-container>
+      <nb-header/>
+      <nb-content>
+        <nb-form>
+          <nb-item>
+            <nb-input v-model="username" placeholder="Username" />
+          </nb-item>
+          <nb-item>
+            <nb-input v-model="password" placeholder="Password" />
+          </nb-item>
+          <nb-button full primary :onPress="handleBtnPress">
+            <nb-text>Login</nb-text>
+          </nb-button>
+        </nb-form>
+      </nb-content>
     </nb-container>
+  </root>
 </template>
 
 <script>
 import React from "react";
-import { Container, Header, Content, Badge, Text, Icon, View, Button } from "native-base";
+import {
+  Container, Header, Content, Badge,
+  Form, Item, Text, Icon, View, Button, Toast, Root
+} from "native-base";
 export default {
+  components: { Root },
+  data () {
+    return {
+      username: 'abc',
+      password: '123'
+    }
+  },
   methods: {
-    getSwipeLeftComponet: function() {
-      return (
-        <Button success onPress={() => alert("Add")}>
-          <Icon active name="add" style={{ color: "#FFF" }} />
-        </Button>
-      );
-    },
-    getSwipeRightComponet: function() {
-      return (
-        <Button danger onPress={() => alert("Trash")}>
-          <Icon active name="trash" />
-        </Button>
-      );
-    },
-    getSwipeBodyComponet: function() {
-      return (
-        <View style={{ paddingLeft: 20 }}>
-          <Text>Swipe me to left and right</Text>
-        </View>
-      );
+    handleBtnPress () {
+      Toast.show({
+        text: 'Wrong password!',
+        buttonText: 'Okay'
+      });
+      console.log('username');
+      console.log(this.username);
     }
   }
 };
