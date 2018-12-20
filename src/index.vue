@@ -19,9 +19,7 @@
         <nb-row :style="{ backgroundColor: '#fff' }" :size="25">
           <nb-content>
             <nb-form>
-              <nb-item>
-                <nb-input placeholder="Enter messages" />
-              </nb-item>
+              <nb-textarea full :rowSpan="4" bordered placeholder="Enter messages" />
               <nb-button full :onPress="sendMessages">
                 <nb-text>Send</nb-text>
               </nb-button>
@@ -39,7 +37,7 @@ import { ListView } from "react-native"
 import { Col, Row, Grid } from 'react-native-easy-grid'
 import {
   Button, Icon, Text, ListItem, Root,
-  Form, Item, Input
+  Form, Item, Input, Textarea
 } from "native-base"
 
 export default {
