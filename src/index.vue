@@ -1,46 +1,98 @@
 <template>
   <root>
     <nb-container>
-      <nb-header/>
-      <nb-content>
-        <nb-form>
-          <nb-item>
-            <nb-input v-model="username" placeholder="Username" />
-          </nb-item>
-          <nb-item>
-            <nb-input v-model="password" placeholder="Password" />
-          </nb-item>
-          <nb-button full primary :onPress="handleBtnPress">
-            <nb-text>Login</nb-text>
-          </nb-button>
-        </nb-form>
-      </nb-content>
+      <nb-header />
+      <nb-grid>
+        <nb-row :style="{ backgroundColor: '#635DB7' }" :size="75">
+          <nb-content>
+            <nb-list
+              :leftOpenValue="75"
+              :rightOpenValue="-75"
+              :dataSource="getListArr()"
+              :renderRow="getListItemRow"
+              :renderLeftHiddenRow="getLeftHiddenRowComponet"
+              :renderRightHiddenRow="getRighttHiddenRowComponet"
+            >
+            </nb-list>
+          </nb-content>
+        </nb-row>
+        <nb-row :style="{ backgroundColor: '#fff' }" :size="25">
+          <nb-content>
+            <nb-form>
+              <nb-item>
+                <nb-input placeholder="Enter messages" />
+              </nb-item>
+              <nb-button full :onPress="sendMessages">
+                <nb-text>Send</nb-text>
+              </nb-button>
+            </nb-form>
+          </nb-content>
+        </nb-row>
+      </nb-grid>
     </nb-container>
   </root>
 </template>
 
 <script>
-import React from "react";
+import React from "react"
+import { ListView } from "react-native"
+import { Col, Row, Grid } from 'react-native-easy-grid'
 import {
-  Container, Header, Content, Badge,
-  Form, Item, Text, Icon, View, Button, Toast, Root
-} from "native-base";
+  Button, Icon, Text, ListItem, Root,
+  Form, Item, Input
+} from "native-base"
+
 export default {
   components: { Root },
   data () {
     return {
-      username: 'abc',
-      password: '123'
+      ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }),
+      basic: true,
+      listViewData: [
+        "Simon Mignolet",
+        "Nathaniel Clyne",
+        "Dejan Lovren",
+        "Mama Sakho",
+        "Alberto Moreno",
+        "Emre Can",
+        "Joe Allen",
+        "Phil Coutinho"
+      ]
     }
   },
   methods: {
-    handleBtnPress () {
-      Toast.show({
-        text: 'Wrong password!',
-        buttonText: 'Okay'
-      });
-      console.log('username');
-      console.log(this.username);
+    deleteRow: function(secId, rowId, rowMap) {
+      rowMap[`${secId}${rowId}`].props.closeRow();
+      const newData = [...this.listViewData];
+      newData.splice(rowId, 1);
+      this.listViewData = newData;
+    },
+    getLeftHiddenRowComponet: function(data) {
+      return (
+        <Button full onPress={() => alert(data)}>
+          <Icon active name="information-circle" />
+        </Button>
+      );
+    },
+    getRighttHiddenRowComponet: function(data, secId, rowId, rowMap) {
+      return (
+        <Button full danger onPress={_ => this.deleteRow(secId, rowId, rowMap)}>
+          <Icon active name="trash" />
+        </Button>
+      );
+    },
+    getListArr: function() {
+      return this.ds.cloneWithRows(this.listViewData);
+    },
+    getListItemRow: function(data) {
+      return (
+        <ListItem>
+          <Text>{data}</Text>
+        </ListItem>
+      );
+    },
+    sendMessages: function() {
+      console.log('send message')
     }
   }
 };
